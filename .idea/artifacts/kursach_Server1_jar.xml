@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="kursach_Server1:jar">
+    <output-path>$PROJECT_DIR$</output-path>
+    <root id="archive" name="kursach_Server.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="kursach_Server" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../drivers/mysql-connector-j-9.1.0/mysql-connector-j-9.1.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/mysql/mysql-connector-java/5.1.44/mysql-connector-java-5.1.44.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
