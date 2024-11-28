@@ -5,6 +5,7 @@ import messages.Message;
 import messages.MessageType;
 import tables.Account;
 import tables.Outlets;
+import tables.Products;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -23,7 +24,7 @@ public class ShowAccounts extends JFrame {
     private JTable table1;
     private JButton addBtn, backTo;
     private DefaultTableModel dfModel;
-    private ArrayList<Outlets> outlets = new ArrayList<Outlets>();
+    private ArrayList<Products> products = new ArrayList<Products>();
     private String[] clmnsName = {"id", "Логин", "Пароль","Роль", "Фамилия", "Имя", "Отчество", "Статус"};
 
 

@@ -1,9 +1,7 @@
 package GUI;
 
-import messages.Message;
-import messages.MessageType;
 import tables.Clients;
-import tables.Outlets;
+import tables.Products;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
@@ -25,11 +23,11 @@ public class SearchClients extends JDialog implements TableModelListener {
     private String strSearch;
     //private JButton addBtn, makeRentBtn, delBtn, backTo;
     private DefaultTableModel dfModel;
-    private ArrayList<Outlets> outlets = new ArrayList<Outlets>();
-    private String[] clmnsName = {"id", "Фамилия", "Имя","Отчество", "Компания", "Реквизиты", "Адрес", "Телефон"};    private String msg;
+    private ArrayList<Products> products = new ArrayList<Products>();
+    private String[] clmnsName = {"id", "Фамилия", "Имя","Отчество", "Почта", "Телефон"};
     private List<Clients> listik;
     private JTextField search;
-    private JLabel labelSearch= new JLabel("Введите название для поиска");
+    private JLabel labelSearch= new JLabel("Введите параметр для поиска");
 
 
     //DataModel dataModel = new DataModel();
@@ -70,7 +68,7 @@ public class SearchClients extends JDialog implements TableModelListener {
         table1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 
-        title = new JLabel("Найденные клиенты:");
+        title = new JLabel("Найденные оценщики:");
 
 
         JScrollPane jScrollPane = new JScrollPane(table1);
@@ -102,19 +100,17 @@ public class SearchClients extends JDialog implements TableModelListener {
             for(int i = 0; i < 100; i++) { }
             for (Clients client : listik) {
 
-                String str1 = client.getCompany();
-                String str2 = client.getAddress();
-                String str3 = client.getDetails();
-                String str4 = client.getPhone();
+                String str1 = client.getEmail();
+                String str2 = client.getPhone();
                 String strF = client.getLast_name();
                 String strN = client.getFirst_name();
                 String strO = client.getMiddle_name();
 
-                if (str1.contains(search.getText())||str2.contains(search.getText())||
-                        str3.contains(search.getText())||str4.contains(search.getText())||
-                        strF.contains(search.getText())||strN.contains(search.getText())||
-                        strO.contains(search.getText())) {
-                    Object[] objects = {client.getIdclients(), client.getLast_name(), client.getFirst_name(), client.getMiddle_name(), client.getCompany(), client.getDetails(), client.getAddress(), client.getPhone()};
+
+                if (str1.toLowerCase().contains(search.getText())||str2.toLowerCase().contains(search.getText())||
+                        strF.toLowerCase().contains(search.getText())||strN.toLowerCase().contains(search.getText())||
+                        strO.toLowerCase().contains(search.getText())) {
+                    Object[] objects = {client.getIdclients(), client.getLast_name(), client.getFirst_name(), client.getMiddle_name(), client.getEmail(), client.getPhone()};
                     dfModel.addRow(objects);
                 }
             }

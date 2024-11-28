@@ -2,10 +2,7 @@ package GUI;
 
 import messages.Message;
 import messages.MessageType;
-import tables.Account;
 import tables.Clients;
-import tables.Role;
-import tables.StatusUser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,9 +16,9 @@ public class FrameNewClient extends JDialog {
 
     BgPanel panel= new BgPanel();
     private ShowClients parent;
-    private  JTextField firstName, lastName,middleName, company, details, address, phone ; //Текстовое поле
+    private  JTextField firstName, lastName,middleName, email, phone ; //Текстовое поле
     private JLabel title;
-    private JLabel ttFirstName,ttLastName,ttMiddleName, ttCompany, ttDetails, ttAddress, ttPhone;
+    private JLabel ttFirstName,ttLastName,ttMiddleName, ttEmail, ttPhone;
     private JButton addEntry, backTo;
     String msg;
     private JFrame mainFrame;
@@ -34,7 +31,7 @@ public class FrameNewClient extends JDialog {
         this.parent= parent;
        // parent.setVisible(false);
         setLayout(null);
-        setSize(610,650);
+        setSize(610,550);
         setLocation(650,225);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         getContentPane().setBackground(Color.PINK);
@@ -44,20 +41,16 @@ public class FrameNewClient extends JDialog {
 
         panel.setLayout(null);
 
-        title = new JLabel("Добавление клиента");
+        title = new JLabel("Добавление оценщика");
         ttFirstName = new JLabel("Имя контактного лица:");
         ttLastName = new JLabel("Фамилия контактного лица:");
         ttMiddleName = new JLabel("Отчество контактного лица:");
-        ttCompany = new JLabel("Организация:");
-        ttDetails = new JLabel("Реквизиты:");
-        ttAddress = new JLabel("Адрес главного офиса:");
+        ttEmail = new JLabel("Почта:");
         ttPhone = new JLabel("Телефон:");
         firstName = new JTextField();
         lastName = new JTextField();
         middleName = new JTextField();
-        company = new JTextField();
-        details = new JTextField();
-        address =new JTextField();
+        email = new JTextField();
         phone = new JTextField();
         addEntry = new JButton("Добавить");
         backTo = new JButton("Назад");
@@ -77,27 +70,19 @@ public class FrameNewClient extends JDialog {
         ttMiddleName.setFont(BigFontTR);
         middleName.setBounds(200,240,350,35);
         middleName.setFont(new Font("Dialog", Font.PLAIN, 18));
-        ttCompany.setBounds(5,310,195, 35);
-        ttCompany.setFont(BigFontTR);
-        company.setBounds(200,310,350,35);
-        company.setFont(new Font("Dialog", Font.PLAIN, 18));
-        ttDetails.setBounds(5,380,195, 35);
-        ttDetails.setFont(BigFontTR);
-        details.setBounds(200,380,350,35);
-        details.setFont(new Font("Dialog", Font.PLAIN, 18));
-        ttAddress.setBounds(5,450,195, 35);
-        ttAddress.setFont(BigFontTR);
-        address.setBounds(200,450,350,35);
-        address.setFont(new Font("Dialog", Font.PLAIN, 18));
-        ttPhone.setBounds(5,520,195, 35);
+        ttEmail.setBounds(5,310,195, 35);
+        ttEmail.setFont(BigFontTR);
+        email.setBounds(200,310,350,35);
+        email.setFont(new Font("Dialog", Font.PLAIN, 18));
+        ttPhone.setBounds(5,380,195, 35);
         ttPhone.setFont(BigFontTR);
-        phone.setBounds(200,520,350,30);
+        phone.setBounds(200,380,350,30);
         phone.setFont(new Font("Dialog", Font.PLAIN, 18));
         addEntry.setSize(120,30);
-        addEntry.setLocation(80,560);
+        addEntry.setLocation(80,450);
         addEntry.setFont(BigFontTR);
         backTo.setSize(120,30);
-        backTo.setLocation(230,560);
+        backTo.setLocation(230,450);
         backTo.setFont(BigFontTR);
 
     }
@@ -107,16 +92,12 @@ public class FrameNewClient extends JDialog {
         panel.add(ttFirstName);
         panel.add(ttLastName);
         panel.add(ttMiddleName);
-        panel.add(ttCompany);
-        panel.add(ttDetails);
-        panel.add(ttAddress);
+        panel.add(ttEmail);
         panel.add(ttPhone);
         panel.add(firstName);
         panel.add(lastName);
         panel.add(middleName);
-        panel.add(company);
-        panel.add(details);
-        panel.add(address);
+        panel.add(email);
         panel.add(phone);
         panel.add(addEntry);
         panel.add(backTo);
@@ -137,8 +118,7 @@ public class FrameNewClient extends JDialog {
             for(int i = 0; i < 100; i++) { }
 
             if (firstName.getText().trim().length() > 0 && lastName.getText().trim().length() > 0 &&
-                    middleName.getText().trim().length() > 0 && company.getText().trim().length() > 0 &&
-                    details.getText().trim().length() > 0 && address.getText().trim().length() > 0 &&
+                    middleName.getText().trim().length() > 0 && email.getText().trim().length() > 0 &&
                     phone.getText().trim().length() > 0) {
                 if(matcher.find() || matcher1.find() || matcher2.find()){
                     msg = "Не корректно введены данные";
@@ -147,9 +127,7 @@ public class FrameNewClient extends JDialog {
                 }
 
                 Clients client = new Clients();
-                client.setCompany(company.getText());
-                client.setDetails(details.getText());
-                client.setAddress(address.getText());
+                client.setEmail(email.getText());
                 client.setPhone(phone.getText());
                 client.setLast_name(lastName.getText());
                 client.setFirst_name(firstName.getText());

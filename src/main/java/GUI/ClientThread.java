@@ -7,9 +7,8 @@ import org.jfree.chart.ChartFrame;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
-import tables.Account;
-import tables.Outlets;
-import tables.Rent;
+import tables.*;
+
 
 import javax.swing.*;
 import java.io.*;
@@ -22,7 +21,6 @@ import java.util.List;
 //
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.chart.ChartUtilities;
-import org.jfree.ui.RefineryUtilities;
 
 //
 public class ClientThread extends Thread {
@@ -92,7 +90,7 @@ public class ClientThread extends Thread {
                         msg = "Вы ввели неверный логин или пароль!";
                         JOptionPane.showMessageDialog(mainFrame, msg);
 
-                        FrameAuthorization frame2 = new FrameAuthorization("Авторизация",new Frame("www"));
+                        FrameAuthorization frame2 = new FrameAuthorization("Авторизация",new Frame("Система учета оценки качества"));
                         frame2.launchPanel();
                         frame2.setVisible(true);
                         frame2.setResizable(false);
@@ -123,7 +121,32 @@ public class ClientThread extends Thread {
                         System.out.println("Отчёт успешно записан");
 
                         break;
-                    case GET_ARENDED_OUTLETS:
+                    case GET_FREE_PRODUCTS:
+                        AvailableProducts frame20 = new AvailableProducts("Доступные для оценки товары");
+                        frame20.insertProducts(enteringMessage.getListProducts());
+                        frame20.setVisible(true);
+                        frame20.setResizable(false);
+                        frame20.setLocationRelativeTo(null);
+
+
+                        List<Products> listProductsForUpdate;
+                        listProductsForUpdate=enteringMessage.getListProducts();
+                        PrintWriter wq = null;//1) 0-2000 2) 2001-5000 3) 5001-8000 4) 8001+
+                        PrintWriter wz = null;//1) 0-2000 2) 2001-5000 3) 5001-8000 4) 8001+
+                        String string3 = "";
+                        pq = new PrintWriter(new OutputStreamWriter(new FileOutputStream("otchet1.txt"), "UTF-8"));
+                        pz = new PrintWriter(new OutputStreamWriter(new FileOutputStream("otchet1.json"), "UTF-8"));
+
+                        for(Products products: listProductsForUpdate) {
+                            pq.println(products.toString());
+                            pz.println(products.toString());
+                        }
+                        pq.close();
+                        pz.close();
+                        System.out.println("Отчёт успешно записан");
+
+                        break;
+                    /*case GET_ARENDED_OUTLETS:
                         ArendedOutlets frame5 = new ArendedOutlets("Арендованные помещения");
                         frame5.insertOutlets(enteringMessage.getListOutlets());
                         frame5.insertRents(enteringMessage.getListRents());
@@ -146,19 +169,42 @@ public class ClientThread extends Thread {
                         pp.close();
                         System.out.println("Отчёт успешно записан");
 
+                        break; */
+                    case GET_UNAVAILABLE_PRODUCTS:
+                        UnavailableProducts frame5 = new UnavailableProducts("Товары с оценкой качества");
+                        frame5.insertProducts(enteringMessage.getListProducts());
+                        frame5.insertQualityAssessments(enteringMessage.getListQualityAssessmentss());
+                        frame5.setVisible(true);
+                        frame5.setResizable(false);
+                        frame5.setLocationRelativeTo(null);
+
+                        List<QualityAssessments> listQualityAssessmentsForUpdate;
+                        listQualityAssessmentsForUpdate=enteringMessage.getListQualityAssessmentss();
+                        PrintWriter pw = null;//1) 0-2000 2) 2001-5000 3) 5001-8000 4) 8001+
+                        PrintWriter pp = null;//1) 0-2000 2) 2001-5000 3) 5001-8000 4) 8001+
+                        String string = "";
+                        pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream("otchet.txt"), "UTF-8"));
+                        pp = new PrintWriter(new OutputStreamWriter(new FileOutputStream("otchet.json"), "UTF-8"));
+                        for(QualityAssessments qualityAssessments: listQualityAssessmentsForUpdate) {
+                            pw.println(qualityAssessments.toString());
+                            pp.println(qualityAssessments.toString());
+                        }
+                        pw.close();
+                        pp.close();
+                        System.out.println("Отчёт успешно записан");
+
                         break;
                     case GET_CLIENTS:
-                        ShowClients frame6 = new ShowClients("Клиенты");
+                        ShowClients frame6 = new ShowClients("Оценщики");
                         frame6.insertClients(enteringMessage.getListClients());
                         frame6.setVisible(true);
                         frame6.setResizable(false);
                         frame6.setLocationRelativeTo(null);
                         break;
-                    case GET_ID_FOR_RENTS:
-
+                    /*case GET_ID_FOR_RENTS:
                         try {
                             MakeRent frame7 = new MakeRent("Оформление договора", new MenuUser("www"));
-                            frame7.insertIDoutlets(enteringMessage.getListOutlets());
+                            frame7.insertIDoutlets(enteringMessage.getListProducts());
                             frame7.insertIDclients(enteringMessage.getListClients());
                             frame7.setVisible(true);
                             frame7.setResizable(false);
@@ -170,6 +216,22 @@ public class ClientThread extends Thread {
                     case RENT_INSERT:
                         msg = "Договор добавлен в базу данных";
                         JOptionPane.showMessageDialog(mainFrame, msg);  //Диалоговое окно вывода сообщения
+                        break; */
+                    case GET_ID_FOR_REVIEW:
+                        try {
+                            MakeReview frame7 = new MakeReview("Оценка качества", new MenuUser("www"));
+                            frame7.insertIDproducts(enteringMessage.getListProducts());
+                            frame7.insertIDclients(enteringMessage.getListClients());
+                            frame7.setVisible(true);
+                            frame7.setResizable(false);
+                            frame7.setLocationRelativeTo(null);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case QUALITY_ASSESSMENT_INSERT:
+                        msg = "Оценка добавлена в базу данных";
+                        JOptionPane.showMessageDialog(mainFrame, msg);  //Диалоговое окно вывода сообщения
                         break;
                     case CLIENT_INSERT:
                         msg = "Клиент добавлен в базу данных";
@@ -177,6 +239,10 @@ public class ClientThread extends Thread {
                         break;
                     case OUTLET_INSERT:
                         msg = "Помещение добавлено в базу данных";
+                        JOptionPane.showMessageDialog(mainFrame, msg);
+                        break;
+                    case PRODUCT_INSERT:
+                        msg = "Продукт добавлен в базу данных";
                         JOptionPane.showMessageDialog(mainFrame, msg);
                         break;
                     case ADD_ADMIN:
@@ -215,14 +281,14 @@ public class ClientThread extends Thread {
                         ///
                         break;
                     case SHOW_FREEOUT:
-                        FreeOutlets frame13 = new FreeOutlets("Свободные помещения:");
-                        frame13.insertOutlets(enteringMessage.getListOutlets());
+                        FreeProducts frame13 = new FreeProducts("Доступная продукция:");
+                        frame13.insertProducts(enteringMessage.getListProducts());
                         frame13.setVisible(true);
                         frame13.setResizable(false);
                         frame13.setLocationRelativeTo(null);
                         ////
-                        List<Outlets> listOutletsForUpdate1;
-                        listOutletsForUpdate1=enteringMessage.getListOutlets();
+                        List<Products> listProductsForUpdate1;
+                        listProductsForUpdate1=enteringMessage.getListProducts();
 
                         ///
 
@@ -235,11 +301,11 @@ public class ClientThread extends Thread {
                         p7 = new PrintWriter(new OutputStreamWriter(new FileOutputStream("otchet2.json"), "UTF-8"));
                         p8 = new PrintWriter(new OutputStreamWriter(new FileOutputStream("otchet2.pdf"), "UTF-8"));
                         p9 = new PrintWriter(new OutputStreamWriter(new FileOutputStream("otchet2.docx"), "UTF-8"));
-                        for(Outlets outlets: listOutletsForUpdate1) {
-                            p6.println(outlets.toString());
-                            p7.println(outlets.toString());
-                            p8.println(outlets.toString());
-                            p9.println(outlets.toString());
+                        for(Products products: listProductsForUpdate1) {
+                            p6.println(products.toString());
+                            p7.println(products.toString());
+                            p8.println(products.toString());
+                            p9.println(products.toString());
                         }
                         p6.close();
                         p7.close();
@@ -250,6 +316,18 @@ public class ClientThread extends Thread {
                         ///
                         break;
                     case DELETE_FREE_OUTLET:
+                        msg="Запись удалена";
+                        JOptionPane.showMessageDialog(mainFrame, msg);
+                        break;
+                    case DELETE_AVAILABLE_PRODUCT:
+                        msg="Запись удалена";
+                        JOptionPane.showMessageDialog(mainFrame, msg);
+                        break;
+                    case DELETE_UNAVAILABLE_PRODUCTS:
+                        msg="Запись удалена";
+                        JOptionPane.showMessageDialog(mainFrame, msg);
+                        break;
+                    case DELETE_REVIEW:
                         msg="Запись удалена";
                         JOptionPane.showMessageDialog(mainFrame, msg);
                         break;
@@ -268,251 +346,155 @@ public class ClientThread extends Thread {
 
                     case GRAPHICS:
 
-                        List<Rent> listRents=enteringMessage.getListRents();
-                        List<Double> listPayments = new LinkedList<Double>();
+                        List<QualityAssessments> listQualityAssessments = enteringMessage.getListQualityAssessmentss();
+                        List<Integer> listQualityScores = new LinkedList<>();
 
-                        for(Rent rent:listRents){
-                            listPayments.add(
-                                    rent.getPayment());
+// Заполнение списка оценками качества
+                        for (QualityAssessments assessment : listQualityAssessments) {
+                            listQualityScores.add(assessment.getQualityScore());
                         }
+                        int numberOfReviews = listQualityAssessments.size();
 
-                        int[] mas = new int[5];
-                        for (int i = 0; i < 5; i++) {
-                            mas[i] = 0;
-                        }
-                        int summ = 0;
+// Вычисление общей оценки
+                        int totalScore = listQualityScores.stream().mapToInt(Integer::intValue).sum();
 
-                        for (Double i:listPayments) {
+// Вычисление среднего значения
+                        double averageScore = numberOfReviews > 0 ? (double) totalScore / numberOfReviews : 0;
 
-                                if (i > 0 && i < 2000) {
-                                    summ += i;
-                                    mas[0]++;
-                                }
-                                if (i > 2001 && i < 5000) {
-                                    summ += i;
-                                    mas[1]++;
-                                }
-                                if (i > 5001 && i < 8000) {
-                                    summ += i;
-                                    mas[2]++;
-                                }
-                                if (i > 8001) {
-                                    summ += i;
-                                    mas[3]++;
-                                }
-                            mas[4] = summ;
-                        }
-
-
+// Создание набора данных для линейного графика
                         DefaultCategoryDataset data = new DefaultCategoryDataset();
-                        data.setValue(mas[0], "Прибыль", "до 2000$");
-                        data.setValue(mas[1], "Прибыль", "до 5000$");
-                        data.setValue(mas[2], "Прибыль", "до 8000$");
-                        data.setValue(mas[3], "Прибыль", "от 8001$");
-                        //Создает гистограмму
-                        JFreeChart chart = ChartFactory.createBarChart("График ", "денежные диапазоны", "количество заключенных договоров", data, PlotOrientation.VERTICAL, true, true, false);
 
-                        int wid = 640;   /* Width of the image */
-                        int heig = 480;  /* Height of the image */
-                        File BarChart1 = new File( "BarChart1.jpeg" );
-                        ChartUtilities.saveChartAsJPEG( BarChart1 , chart , wid , heig );
+// Заполнение набора данных оценками качества по их соответствующим оценкам
+                        for (int i = 0; i < listQualityScores.size(); i++) {
+                            data.setValue(listQualityScores.get(i), "Оценки качества", "Оценка " + (i + 1));
+                        }
 
-                        ChartFrame frame = new ChartFrame("Отчётный график", chart);
+// Создание линейного графика
+                        JFreeChart lineChart = ChartFactory.createLineChart(
+                                "График оценки качества", // Заголовок графика
+                                "Оценки",                // Метка по оси X
+                                "Качество оценки",       // Метка по оси Y
+                                data,                    // Набор данных
+                                PlotOrientation.VERTICAL, // Ориентация графика
+                                true,                    // Включить легенду
+                                true,                    // Подсказки
+                                false                    // URL
+                        );
+
+// Сохранение графика как файла изображения
+                        int width = 640;   // Ширина изображения
+                        int height = 480;  // Высота изображения
+                        File lineChartFile = new File("QualityLineChart.jpeg");
+                        ChartUtilities.saveChartAsJPEG(lineChartFile, lineChart, width, height);
+
+// Отображение графика в окне
+                        ChartFrame frame = new ChartFrame("Отчётный график", lineChart);
                         frame.setSize(950, 400);
                         frame.setLocationRelativeTo(null);
                         frame.setVisible(true);
-                        JOptionPane.showMessageDialog(mainFrame, "Сумма прибыли с аренды: " + mas[4]+"$");
 
+// Отображение среднего значения оценок качества
+                        JOptionPane.showMessageDialog(mainFrame, "Среднее значение оценок качества: " + averageScore);
                         break;
 
                     case GRAPHICS1:
 
+                        List<QualityAssessments> listQualityAssessments1 = enteringMessage.getListQualityAssessmentss();
+                        List<Integer> listQualityScores1 = new LinkedList<>();
 
-                        List<Rent> listRents1=enteringMessage.getListRents();
-                        List<Double> listPayments1 = new LinkedList<Double>();
-
-                        for(Rent rent:listRents1){
-                            listPayments1.add(
-                                    rent.getPayment());
+// Заполнение списка оценками качества
+                        for (QualityAssessments assessment : listQualityAssessments1) {
+                            listQualityScores1.add(assessment.getQualityScore());
                         }
+                        int numberOfReviews1 = listQualityAssessments1.size();
 
-                        int[] mas1 = new int[11];
-                        for (int i = 0; i < 11; i++) {
-                            mas1[i] = 0;
+// Вычисление общей оценки
+                        int totalScore1 = listQualityScores1.stream().mapToInt(Integer::intValue).sum();
+
+// Вычисление порога для хорошего индекса удовлетворенности
+                        int maxPossibleScore = numberOfReviews1 * 100; // Предполагаем, что каждая оценка может максимум быть 100
+                        double threshold = 0.75 * maxPossibleScore;
+
+// Создание набора данных для диаграммы с двумя столбцами
+                        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+                        dataset.setValue(totalScore1, "Сумма оценок", "Оценки товаров");
+                        dataset.setValue(maxPossibleScore, "Максимальная оценка", "Оценки товаров");
+
+// Создание столбчатой диаграммы
+                        JFreeChart barChart = ChartFactory.createBarChart(
+                                "Диаграмма оценок товаров", // Заголовок графика
+                                "Категория",                 // Метка по оси X
+                                "Значение",                 // Метка по оси Y
+                                dataset,                    // Набор данных
+                                PlotOrientation.VERTICAL,    // Ориентация графика
+                                true,                       // Включить легенду
+                                true,                       // Подсказки
+                                false                       // URL
+                        );
+
+// Сохранение графика как файла изображения
+                        int width2 = 640;   // Ширина изображения
+                        int height2 = 480;  // Высота изображения
+                        File barChartFile = new File("BarChart.jpeg");
+                        ChartUtilities.saveChartAsJPEG(barChartFile, barChart, width2, height2);
+
+// Отображение графика в окне
+                        ChartFrame frame8 = new ChartFrame("Отчётный график", barChart);
+                        frame8.setSize(950, 400);
+                        frame8.setLocationRelativeTo(null);
+                        frame8.setVisible(true);
+
+                        if (totalScore1 < threshold) {
+                            JOptionPane.showMessageDialog(mainFrame, "Индекс удовлетворенности клиентов плохой.");
+                        } else {
+                            JOptionPane.showMessageDialog(mainFrame, "Индекс удовлетворенности клиентов хороший.");
                         }
-
-
-                        for (Double i:listPayments1) {
-
-                            if (i > 0 && i < 1000) {
-
-                                mas1[0]++;
-                            }
-                            if (i > 1001 && i < 2000) {
-
-                                mas1[1]++;
-                            }
-                            if (i > 2001 && i < 3000) {
-
-                                mas1[2]++;
-                            }
-                            if (i > 3001 && i < 4000) {
-
-                                mas1[3]++;
-                            }
-                            if (i > 4001 && i < 5000) {
-
-                                mas1[4]++;
-                            }
-                            if (i > 5001 && i < 6000) {
-
-                                mas1[5]++;
-                            }
-                            if (i > 6001 && i < 7000) {
-
-                                mas1[6]++;
-                            }
-                            if (i > 7001 && i < 8000) {
-
-                                mas1[7]++;
-                            }
-                            if (i > 8001 && i < 9000) {
-
-                                mas1[8]++;
-                            }
-                            if (i > 9001 && i < 10000) {
-
-                                mas1[9]++;
-                            }
-                            if (i > 10001) {
-
-                                mas1[10]++;
-                            }
-
-                        }
-
-
-                        DefaultCategoryDataset data1 = new DefaultCategoryDataset();
-                        data1.setValue(mas1[0], "Прибыль", "до 1000$");
-                        data1.setValue(mas1[1], "Прибыль", "до 2000$");
-                        data1.setValue(mas1[2], "Прибыль", "до 3000$");
-                        data1.setValue(mas1[3], "Прибыль", "до 4000$");
-                        data1.setValue(mas1[4], "Прибыль", "до 5000$");
-                        data1.setValue(mas1[5], "Прибыль", "до 6000$");
-                        data1.setValue(mas1[6], "Прибыль", "до 7000$");
-                        data1.setValue(mas1[7], "Прибыль", "до 8000$");
-                        data1.setValue(mas1[8], "Прибыль", "до 9000$");
-                        data1.setValue(mas1[9], "Прибыль", "до 10000$");
-                        data1.setValue(mas1[10], "Прибыль", "от 10001$");
-                        //Создает гистограмму
-                        JFreeChart chart1 = ChartFactory.createBarChart("График c меньшей шкалой ", "денежные диапазоны", "количество заключенных договоров", data1, PlotOrientation.VERTICAL, true, true, false);
-                        int widt = 1100;   /* Width of the image */
-                        int heigh = 480;  /* Height of the image */
-                        File BarChart = new File( "BarChart.jpeg" );
-                        ChartUtilities.saveChartAsJPEG( BarChart , chart1 , widt , heigh );
-
-                        ChartFrame frame1 = new ChartFrame("Отчётный график", chart1);
-                        frame1.setSize(1100, 400);
-                        frame1.setLocationRelativeTo(null);
-                        frame1.setVisible(true);
 
                         break;
 
                     case GRAPHICS2:
 
+                        List<Products> listProducts = enteringMessage.getListProducts(); // Assuming this gets the list of products
+                        int availableCount = 0; // Count for products without a rating (AVAILABLE)
+                        int unavailableCount = 0; // Count for products with a rating (UNAVAILABLE)
 
-                        List<Rent> listRents2=enteringMessage.getListRents();
-                        List<Double> listPayments2 = new LinkedList<Double>();
-
-                        for(Rent rent:listRents2){
-                            listPayments2.add(
-                                    rent.getPayment());
+// Count products based on their status
+                        for (Products product : listProducts) {
+                            if (product.getStatus() == StatusProducts.AVAILABLE) {
+                                availableCount++;
+                            } else if (product.getStatus() == StatusProducts.UNAVAILABLE) {
+                                unavailableCount++;
+                            }
                         }
 
-                        int[] mas2 = new int[11];
-                        for (int i = 0; i < 11; i++) {
-                            mas2[i] = 0;
-                        }
+// Prepare the dataset for the pie chart
+                        DefaultPieDataset data3 = new DefaultPieDataset();
+                        data3.setValue("Без оценки", availableCount); // Count of products without rating
+                        data3.setValue("С оценкой", unavailableCount); // Count of products with rating
 
-
-                        for (Double i:listPayments2) {
-
-                            if (i > 0 && i < 1000) {
-
-                                mas2[0]++;
-                            }
-                            if (i > 1001 && i < 2000) {
-
-                                mas2[1]++;
-                            }
-                            if (i > 2001 && i < 3000) {
-
-                                mas2[2]++;
-                            }
-                            if (i > 3001 && i < 4000) {
-
-                                mas2[3]++;
-                            }
-                            if (i > 4001 && i < 5000) {
-
-                                mas2[4]++;
-                            }
-                            if (i > 5001 && i < 6000) {
-
-                                mas2[5]++;
-                            }
-                            if (i > 6001 && i < 7000) {
-
-                                mas2[6]++;
-                            }
-                            if (i > 7001 && i < 8000) {
-
-                                mas2[7]++;
-                            }
-                            if (i > 8001 && i < 9000) {
-
-                                mas2[8]++;
-                            }
-                            if (i > 9001 && i < 10000) {
-
-                                mas2[9]++;
-                            }
-                            if (i > 10001) {
-
-                                mas2[10]++;
-                            }
-
-                        }
-
-                        DefaultPieDataset data3 = new DefaultPieDataset( );
-                        data3.setValue("до 1000$", mas2[0] );
-                        data3.setValue("до 2000$", mas2[1] );
-                        data3.setValue("до 3000$", mas2[2] );
-                        data3.setValue("до 4000$", mas2[3] );
-                        data3.setValue("до 5000$", mas2[4] );
-                        data3.setValue("до 6000$", mas2[5] );
-                        data3.setValue("до 7000$", mas2[6] );
-                        data3.setValue("до 8000$", mas2[7] );
-                        data3.setValue("до 9000$", mas2[8] );
-                        data3.setValue("до 10000$", mas2[9] );
-                        data3.setValue("от 10001$", mas2[10] );
-
+// Create the chart
                         JFreeChart chart3 = ChartFactory.createPieChart(
-                                "Плата за аренду",   // chart title
-                                data3,          // data
-                                true,             // include legend
+                                "Статус товаров",  // chart title
+                                data3,             // data
+                                true,              // include legend
                                 true,
-                                false);
+                                false
+                        );
 
-                        int width = 640;   /* Width of the image */
-                        int height = 480;  /* Height of the image */
-                        File pieChart = new File( "PieChart.jpeg" );
-                        ChartUtilities.saveChartAsJPEG( pieChart , chart3 , width , height );
+                        //chart3.getPlot().setSectionPaint("Без оценки", Color.RED); // Red for AVAILABLE
+                        //chart3.getPlot().setSectionPaint("С оценкой", Color.BLUE); // Blue for UNAVAILABLE
+
+                        int width3 = 640;   /* Width of the image */
+                        int height3 = 480;  /* Height of the image */
+                        File pieChart = new File("PieChart.jpeg");
+                        ChartUtilities.saveChartAsJPEG(pieChart, chart3, width3, height3);
 
                         ChartFrame demo = new ChartFrame("Круговая диаграмма", chart3);
                         demo.setSize(960, 400);
                         demo.setLocationRelativeTo(null);
                         demo.setVisible(true);
+
+
 
                         break;
                 }

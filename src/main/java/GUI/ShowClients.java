@@ -1,9 +1,6 @@
 package GUI;
 
-import messages.Message;
-import messages.MessageType;
 import tables.Clients;
-import tables.Outlets;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -12,7 +9,6 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ShowClients extends JFrame {
@@ -23,7 +19,7 @@ public class ShowClients extends JFrame {
     private JButton addBtn,  backTo, delBtn;
     JTextField search;
     private DefaultTableModel dfModel;
-    private String[] clmnsName = {"id", "Фамилия", "Имя","Отчество", "Компания", "Реквизиты", "Адрес", "Телефон"};
+    private String[] clmnsName = {"id", "Фамилия", "Имя","Отчество", "Почта", "Телефон"};
    private List<Clients> listik;
 
 
@@ -50,8 +46,8 @@ public class ShowClients extends JFrame {
         table1.setRowSorter(sorter);
         table1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        title = new JLabel("Список клиентов:");
-        addBtn = new JButton("Добавить клиента");
+        title = new JLabel("Список оценщиков:");
+        addBtn = new JButton("Добавить оценщика");
         delBtn = new JButton("Искать");
         backTo = new JButton("Назад");
 
@@ -93,7 +89,7 @@ public class ShowClients extends JFrame {
         if(clients!=null && clients.size()>0){
             for(Clients client:clients){
 
-                Object[] objects={client.getIdclients(), client.getLast_name(), client.getFirst_name(), client.getMiddle_name(), client.getCompany(), client.getDetails(), client.getAddress(), client.getPhone()};
+                Object[] objects={client.getIdclients(), client.getLast_name(), client.getFirst_name(), client.getMiddle_name(), client.getEmail(), client.getPhone()};
                 dfModel.addRow(objects);
             }
         }
@@ -101,7 +97,7 @@ public class ShowClients extends JFrame {
 
     private class ClickedAdd implements ActionListener{
         public void actionPerformed(ActionEvent e) {
-            FrameNewClient frame6 = new FrameNewClient("Добавление клиента", ShowClients.this);
+            FrameNewClient frame6 = new FrameNewClient("Добавление оценщика", ShowClients.this);
             frame6.launchPanel();
             frame6.setVisible(true);
             frame6.setResizable(false);
@@ -111,7 +107,7 @@ public class ShowClients extends JFrame {
 
     private class ClickedDelete implements ActionListener{
         public void actionPerformed(ActionEvent e) {
-            SearchClients frame16 = new SearchClients("Клиенты", ShowClients.this, listik);
+            SearchClients frame16 = new SearchClients("Оценщики", ShowClients.this, listik);
             //frame16.insertClients();
             frame16.setVisible(true);
             frame16.setResizable(false);

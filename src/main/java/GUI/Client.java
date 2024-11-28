@@ -13,7 +13,7 @@ public class Client {
     public static void main(String[] args)
     {
 
-        Frame frame = new Frame("Система учета деятельности ТЦ");
+        Frame frame = new Frame("Система учета оценки качества");
         frame.setVisible(true);
         frame.setResizable(false);  //размер окна нельзя изменить, т.к false
         frame.setLocationRelativeTo(null); //расположение окна

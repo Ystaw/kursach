@@ -32,10 +32,10 @@ public class MenuUser extends JFrame {
         panel.setLayout(null);
 
         title = new JLabel("Меню пользователя:");
-        bttn1 = new JButton("Просмотр свободных помещений");
-        bttn2 = new JButton("Просмотр арендованных помещений");
-        bttn3 = new JButton("Просмотр клиентов");
-        bttn4 = new JButton("Оформить договор аренды");
+        bttn1 = new JButton("Просмотр товаров для оценки");
+        bttn2 = new JButton("Просмотр товаров с оценкой");
+        bttn3 = new JButton("Просмотр оценщиков");
+        bttn4 = new JButton("Оценить товар");
         backTo = new JButton("Назад");
 
         title.setFont(BigFontTR);
@@ -62,20 +62,20 @@ public class MenuUser extends JFrame {
         panel.add(backTo);
         setContentPane(panel);
 
-        bttn1.addActionListener(new ClickedFreeOutlets());
+        bttn1.addActionListener(new ClickedAvailableProducts());
         bttn2.addActionListener(new ClickedArendedOutlets());
         bttn3.addActionListener(new ClickedShowClients());
-        bttn4.addActionListener(new ClickedMakeRent());
+        bttn4.addActionListener(new ClickedMakeReview());
         backTo.addActionListener(new ClickedBackTo());
 
     }
 
-    private class ClickedFreeOutlets implements ActionListener {
+    private class ClickedAvailableProducts implements ActionListener {
         public void actionPerformed(ActionEvent e) {
 
             Message message = null;
             message = new Message();
-            message.setMessageType(MessageType.GET_FREE_OUTLETS);
+            message.setMessageType(MessageType.GET_FREE_PRODUCTS);
             ClientThread.sendMessage(message);
 
 
@@ -87,7 +87,7 @@ public class MenuUser extends JFrame {
         public void actionPerformed(ActionEvent e) {
             Message message = null;
             message = new Message();
-            message.setMessageType(MessageType.GET_ARENDED_OUTLETS);
+            message.setMessageType(MessageType.GET_UNAVAILABLE_PRODUCTS);
             ClientThread.sendMessage(message);
 
             MenuUser.this.dispose();
@@ -107,11 +107,11 @@ public class MenuUser extends JFrame {
         }
     }
 
-    private class ClickedMakeRent implements ActionListener {
+    private class ClickedMakeReview implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             Message message = null;
             message = new Message();
-            message.setMessageType(MessageType.GET_ID_FOR_RENTS);
+            message.setMessageType(MessageType.GET_ID_FOR_REVIEW);
             ClientThread.sendMessage(message);
 
         }
@@ -121,7 +121,7 @@ public class MenuUser extends JFrame {
         public void actionPerformed(ActionEvent e) {
             MenuUser.this.dispose();
 
-            Frame frame = new Frame("Система учета деятельности ТЦ");
+            Frame frame = new Frame("Система учета оценки качества");
             frame.setVisible(true);
             frame.setResizable(false);
             frame.setLocationRelativeTo(null);

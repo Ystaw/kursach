@@ -120,7 +120,11 @@ public class FrameAuthorization extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 //setVisible(false);
                 FrameAuthorization.this.dispose();  //dispose освобождает ресурсы, занимаемые компонентами окна и внутри окна
-                getParent().setVisible(true);
+                Frame frame = new Frame("Система учета оценки качества");
+                frame.setVisible(true);
+                frame.setResizable(false);
+                frame.setLocationRelativeTo(null);
+                frame.launchPanel();
 
             }
         });

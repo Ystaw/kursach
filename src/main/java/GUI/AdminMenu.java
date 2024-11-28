@@ -30,7 +30,8 @@ public class AdminMenu extends JFrame {
         title = new JLabel("Меню администратора:");
         btnShowClients = new JButton("Управление пользователями системы");
         btnAddAdmin = new JButton("Добавить нового администратора");
-        btnShow = new JButton("Просмотр статуса помещений");
+        //btnShow = new JButton("Просмотр статуса помещений");
+        btnShow = new JButton("Просмотр статуса продукции");
         backTo = new JButton("Назад");
 
         title.setFont(BigFontTR);  //установка шрифта
@@ -100,7 +101,7 @@ public class AdminMenu extends JFrame {
         public void actionPerformed(ActionEvent e) {
             AdminMenu.this.dispose();
 
-            Frame frame = new Frame("Система учета деятельности ТЦ");
+            Frame frame = new Frame("Система учета оценки качества");
             frame.setVisible(true);
             frame.setResizable(false);
             frame.setLocationRelativeTo(null);

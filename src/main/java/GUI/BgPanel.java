@@ -10,7 +10,7 @@ public class BgPanel extends JPanel {
     public void paintComponent(Graphics g){
         Image im = null;
         try {
-            im = ImageIO.read(getClass().getResource("/images/85_650.jpg")); //установление заднего фона
+            im = ImageIO.read(getClass().getResource("/images/v1064-32.jpg")); //установление заднего фона
         } catch (IOException e) {}
         g.drawImage(im, 0, 0, null);
     }
