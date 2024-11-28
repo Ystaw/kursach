@@ -6,22 +6,18 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Clients extends Personal implements Serializable, Identified<Integer> {
+    private static final long serialVersionUID = 1029398801879442863L;
     private int idclients;
-    private String company;
-    private String details;//реквизиты
-    private String address;
-   // private List<Outlets> listOut;
-    private String phone;
+    private String email; // Email
+    private String phone; // Телефон
 
     public Clients(){}
 
     public Clients(String first_name, String last_name, String middle_name, int idclients,
-                   String company, String details, String address, List<Outlets> listOut, String phone) {
+                   String email,  String phone) {
         super(first_name, last_name, middle_name);
         this.idclients = idclients;
-        this.company = company;
-        this.details = details;
-        this.address = address;
+        this.email = email;
         //this.listOut = listOut;
         this.phone = phone;
     }
@@ -36,28 +32,12 @@ public class Clients extends Personal implements Serializable, Identified<Intege
         this.idclients = idclients;
     }  //установить
 
-    public String getCompany() {
-        return company;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPhone() {

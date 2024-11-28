@@ -101,13 +101,23 @@ public class ServerThread extends Thread {
                         message10.setMessageType(MessageType.SHOW_ACCOUNTS);
                         oos.writeObject(message10);
                         break;
-                    case SHOW_FREEOUT:
+                    /*case SHOW_FREEOUT:
                         System.out.println("Просмотр пользователей");
                         List<Outlets> listOutlets;
                         dao = factory.getDao(connection, Outlets.class);
                         listOutlets = dao.getAll();
                         Message message11 = new Message();
                         message11.setOutlets(listOutlets);
+                        message11.setMessageType(MessageType.SHOW_FREEOUT);
+                        oos.writeObject(message11);
+                        break; */
+                    case SHOW_FREEOUT:
+                        System.out.println("Доступная продукция");
+                        List<Products> listProducts;
+                        dao = factory.getDao(connection, Products.class);
+                        listProducts = dao.getAll();
+                        Message message11 = new Message();
+                        message11.setProducts(listProducts);
                         message11.setMessageType(MessageType.SHOW_FREEOUT);
                         oos.writeObject(message11);
                         break;
@@ -130,7 +140,19 @@ public class ServerThread extends Thread {
                         message2.setMessageType(MessageType.GET_FREE_OUTLETS);
                         oos.writeObject(message2);
                         break;
-                    case GET_ARENDED_OUTLETS: {
+                    case GET_FREE_PRODUCTS:
+                        System.out.println("Доступные для оценки товары");
+                        List<Products> listFreeProducts;
+                        dao = factory.getDao(connection, Products.class);
+                        Products producto = new Products();
+                        producto.setStatus(StatusProducts.AVAILABLE);
+                        listFreeProducts = dao.getByParams(producto);
+                        Message message6 = new Message();
+                        message6.setFreeProducts(listFreeProducts);
+                        message6.setMessageType(MessageType.GET_FREE_PRODUCTS);
+                        oos.writeObject(message6);
+                        break;
+                    /*case GET_ARENDED_OUTLETS: {
                         System.out.println("Просмотр договоров");
                         List<Outlets> listArendedOutlets;
                         List<Rent> listRents;
@@ -149,6 +171,26 @@ public class ServerThread extends Thread {
                         oos.writeObject(message3);
                     }
 
+                    break; */
+                    case GET_UNAVAILABLE_PRODUCTS: {
+                        System.out.println("Просмотр товаров с оценкой качества");
+                        List<Products> listUnavailableProducts;
+                        List<QualityAssessments> listQualityAssessmentss;
+                        dao = factory.getDao(connection, Products.class);
+                        Products product = new Products();
+                        product.setStatus(StatusProducts.UNAVAILABLE);
+                        listUnavailableProducts = dao.getByParams(product);
+
+                        dao = factory.getDao(connection, QualityAssessments.class);
+                        listQualityAssessmentss = dao.getAll();
+
+                        Message message3 = new Message();
+                        message3.setFreeProducts(listUnavailableProducts);
+                        message3.setQualityAssessments(listQualityAssessmentss);
+                        message3.setMessageType(MessageType.GET_UNAVAILABLE_PRODUCTS);
+                        oos.writeObject(message3);
+                    }
+
                     break;
                     case GET_CLIENTS:
                         System.out.println("Просмотр клиентов");
@@ -161,7 +203,7 @@ public class ServerThread extends Thread {
                         message4.setMessageType(MessageType.GET_CLIENTS);
                         oos.writeObject(message4);
                         break;
-                    case GET_ID_FOR_RENTS:
+                    /* case GET_ID_FOR_RENTS:
                         System.out.println("Просмотр договоров");
                         List<Outlets> listFreeeOutlets;
                         List<Clients> listForClients;
@@ -199,6 +241,45 @@ public class ServerThread extends Thread {
                             dao.update(outlet);
                         }
                         oos.writeObject(message);
+                        break; */
+                    case GET_ID_FOR_REVIEW:
+                        System.out.println("Просмотр оценки качества");
+                        List<Products> listFreeeProducts;
+                        List<Clients> listForClients;
+                        dao = factory.getDao(connection, Products.class);
+                        Products product5 = new Products();
+                        product5.setStatus(StatusProducts.AVAILABLE);
+                        listFreeeProducts = dao.getByParams(product5);
+                        dao = factory.getDao(connection, Clients.class);
+                        listForClients = dao.getAll();
+                        Message message5 = new Message();
+                        message5.setFreeProducts(listFreeeProducts);
+                        message5.setClients(listForClients);
+                        message5.setMessageType(MessageType.GET_ID_FOR_REVIEW);
+                        oos.writeObject(message5);
+                        break;
+                    case QUALITY_ASSESSMENT_INSERT:
+                        System.out.println("Добавление оценки");
+                        dao = factory.getDao(connection, QualityAssessments.class);
+                        dao.persist(message.getQualityAssessments());
+                        List<QualityAssessments> listQualityAssessmentsForUpdate;
+                        List<Products> listProductsUpdate = new LinkedList<Products>();
+                        listQualityAssessmentsForUpdate=dao.getAll();
+
+                        List<Integer> idProductsForUpdate = new LinkedList<Integer>();
+                        for(QualityAssessments qualityAssessment: listQualityAssessmentsForUpdate){
+                            idProductsForUpdate.add(qualityAssessment.getIdProduct());
+                            Products out = new Products();
+                            out.setIdProduct(qualityAssessment.getIdProduct());
+                            listProductsUpdate.add(out);
+                        }
+                        dao = factory.getDao(connection, Products.class);
+
+                        for(Products product: listProductsUpdate){
+                            // dao.getByParams(outlet);
+                            dao.update(product);
+                        }
+                        oos.writeObject(message);
                         break;
                     case CLIENT_INSERT:
                         System.out.println("Добавление клиента");
@@ -212,19 +293,56 @@ public class ServerThread extends Thread {
                         dao.persist(message.getOutlets());
                         oos.writeObject(message); //сохраняет объект
                         break;
+                    case PRODUCT_INSERT:
+                        System.out.println("Добавление продукции");
+                        dao = factory.getDao(connection, Products.class);
+                        dao.persist(message.getProducts());
+                        oos.writeObject(message); //сохраняет объект
+                        break;
                     case DELETE_FREE_OUTLET:
                         System.out.println("Удаление помещения");
                         dao = factory.getDao(connection, Outlets.class);
                         dao.delete(message.getOutlets());
                         oos.writeObject(message);
                         break;
-                    case DELETE_ARENDED_OUTLET:
+                    case DELETE_AVAILABLE_PRODUCT:
+                        System.out.println("Удаление товара");
+                        dao = factory.getDao(connection, Products.class);
+                        dao.delete(message.getProducts());
+                        oos.writeObject(message);
+                        break;
+                    /*case DELETE_ARENDED_OUTLET:
                         System.out.println("Удаление арендованного помещения");
                         dao = factory.getDao(connection, Outlets.class);
                         dao.delete(message.getOutlets());
                         oos.writeObject(message);
+                        break; */
+                    case DELETE_UNAVAILABLE_PRODUCTS:
+                        System.out.println("Удаление уже оцененного товара");
+                        dao = factory.getDao(connection, Products.class);
+                        dao.delete(message.getProducts());
+                        oos.writeObject(message);
                         break;
-                    case DELETE_RENT:
+                    case DELETE_REVIEW:
+                        System.out.println("Удаление оценки");
+                        dao = factory.getDao(connection, QualityAssessments.class);
+                        dao.delete(message.getQualityAssessments());
+
+                        dao=factory.getDao(connection, Products.class);
+                        Products products =message.getProducts();
+                        String idProductSetFree = String.valueOf(products.getId());
+                        String update="UPDATE bd_mall.products SET status = 'AVAILABLE' WHERE id= ?;";
+
+
+                        try(PreparedStatement statement=connection.prepareStatement(update)) {
+                            statement.setString(1, idProductSetFree);
+                            int rs=statement.executeUpdate();
+                        }catch (Exception e) {
+                            throw new PersistException(e);
+                        }
+                        oos.writeObject(message);
+                        break;
+                    /*case DELETE_RENT:
                         System.out.println("Удаление договора");
                         dao = factory.getDao(connection, Rent.class);
                         dao.delete(message.getRent());
@@ -232,17 +350,17 @@ public class ServerThread extends Thread {
                         dao=factory.getDao(connection, Outlets.class);
                         Outlets outlets =message.getOutlets();
                         String idOutletSetFree = String.valueOf(outlets.getId());
-                        String update="UPDATE bd_mall.outlets SET status = 'FREE' WHERE id= ?;";
+                        String update1="UPDATE bd_mall.outlets SET status = 'FREE' WHERE id= ?;";
 
 
-                        try(PreparedStatement statement=connection.prepareStatement(update)) {
+                        try(PreparedStatement statement=connection.prepareStatement(update1)) {
                             statement.setString(1, idOutletSetFree);
                             int rs=statement.executeUpdate();
                         }catch (Exception e) {
                             throw new PersistException(e);
                         }
                         oos.writeObject(message);
-                        break;
+                        break; */
                     case BANN_USER:
                         System.out.println("Управление пользователями");
                         Account acc= message.getAccount();
@@ -250,26 +368,26 @@ public class ServerThread extends Thread {
                         dao.update(acc);
                         break;
                     case GRAPHICS:
-                        List<Rent> listRents;
-                        dao = factory.getDao(connection, Rent.class);
-                        listRents=dao.getAll();
-                        message.setRents(listRents);
+                        List<QualityAssessments> listQualityAssessmentss;
+                        dao = factory.getDao(connection, QualityAssessments.class);
+                        listQualityAssessmentss=dao.getAll();
+                        message.setQualityAssessments(listQualityAssessmentss);
                         oos.writeObject(message);
                         break;
 
                         ///////////////////
                     case GRAPHICS1:
-                        List<Rent> listRents1;
-                        dao = factory.getDao(connection, Rent.class);
-                        listRents1=dao.getAll();
-                        message.setRents(listRents1);
+                        List<QualityAssessments> listQualityAssessmentss1;
+                        dao = factory.getDao(connection, QualityAssessments.class);
+                        listQualityAssessmentss1=dao.getAll();
+                        message.setQualityAssessments(listQualityAssessmentss1);
                         oos.writeObject(message);
                         break;
                     case GRAPHICS2:
-                        List<Rent> listRents2;
-                        dao = factory.getDao(connection, Rent.class);
-                        listRents2=dao.getAll();
-                        message.setRents(listRents2);
+                        List<Products> listProducts2;
+                        dao = factory.getDao(connection, Products.class);
+                        listProducts2=dao.getAll();
+                        message.setProducts(listProducts2);
                         oos.writeObject(message);
                         break;
 

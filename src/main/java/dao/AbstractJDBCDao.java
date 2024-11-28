@@ -45,7 +45,7 @@ public abstract class AbstractJDBCDao<T extends Identified<PK>, PK extends Integ
         for(int i = 0; i < 100; i++) { }
         try (PreparedStatement statement = connection.prepareStatement(sql)) {  //создание обьекта
             prepareStatementForInsert(statement, object);
-            int count = statement.executeUpdate(); //executeUpdate используется для выполнения обновлений. Он возвращает количество обновленных строк. Для выполнения операторов INSERT, UPDATE или DELETE
+            int count = statement.  executeUpdate(); //executeUpdate используется для выполнения обновлений. Он возвращает количество обновленных строк. Для выполнения операторов INSERT, UPDATE или DELETE
             if (count != 1) {
                 throw new PersistException("On persist modify more then 1 record: " + count);
             }

@@ -3,10 +3,8 @@ package dao.mysql;
 import dao.DaoFactory;
 import dao.GenericDao;
 import dao.PersistException;
-import tables.Account;
-import tables.Clients;
-import tables.Outlets;
-import tables.Rent;
+import tables.*;
+
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
@@ -67,6 +65,9 @@ public class MySQLDaoFactory  implements DaoFactory<Connection> {
                 return new MySQLAccountDao(connection);
             }
         });
+
+
+
         creators.put(Clients.class, new DaoCreator<Connection>() {
             @Override
             public GenericDao create(Connection connection) {
@@ -85,5 +86,20 @@ public class MySQLDaoFactory  implements DaoFactory<Connection> {
                 return new MySQLRentDao(connection);
             }
         });
+
+
+
+        creators.put(Products.class, new DaoCreator<Connection>() {
+            @Override
+            public GenericDao create(Connection connection) { return new MySQLProductsDao(connection); }
+        });
+        creators.put(QualityAssessments.class, new DaoCreator<Connection>() {
+            @Override
+            public GenericDao create(Connection connection) {
+                return new MySQLQualityAssessmentsDao(connection);
+            }
+        });
+
+
     }
 }

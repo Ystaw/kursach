@@ -8,6 +8,8 @@ import tables.Account;
 import tables.Outlets;
 import tables.Role;
 import tables.StatusUser;
+import tables.Products;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -88,6 +90,15 @@ public class Buisness {
 
         GenericDao dao = factory.getDao(connection, Outlets.class);
         List <Outlets> list;
+        list=dao.getAll();
+        return list;
+
+    }
+
+    public static List<Products> getListFreeProducts(DaoFactory factory, Connection connection, Message message) throws PersistException, SQLException {
+
+        GenericDao dao = factory.getDao(connection, Products.class);
+        List <Products> list;
         list=dao.getAll();
         return list;
 
