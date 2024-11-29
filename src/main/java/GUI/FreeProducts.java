@@ -2,7 +2,6 @@ package GUI;
 
 import messages.Message;
 import messages.MessageType;
-import tables.Outlets;
 import tables.Products; // Импортируем класс Product
 
 import javax.swing.*;

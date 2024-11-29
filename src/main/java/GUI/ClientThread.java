@@ -96,31 +96,6 @@ public class ClientThread extends Thread {
                         frame2.setResizable(false);
                         frame2.setLocationRelativeTo(null);
                         break;
-                    case GET_FREE_OUTLETS:
-                        FreeOutlets frame4 = new FreeOutlets("Свободные помещения");
-                        frame4.insertOutlets(enteringMessage.getListOutlets());
-                        frame4.setVisible(true);
-                        frame4.setResizable(false);
-                        frame4.setLocationRelativeTo(null);
-
-
-                        List<Outlets> listOutletsForUpdate;
-                        listOutletsForUpdate=enteringMessage.getListOutlets();
-                        PrintWriter pq = null;//1) 0-2000 2) 2001-5000 3) 5001-8000 4) 8001+
-                        PrintWriter pz = null;//1) 0-2000 2) 2001-5000 3) 5001-8000 4) 8001+
-                        String string1 = "";
-                        pq = new PrintWriter(new OutputStreamWriter(new FileOutputStream("otchet1.txt"), "UTF-8"));
-                        pz = new PrintWriter(new OutputStreamWriter(new FileOutputStream("otchet1.json"), "UTF-8"));
-
-                        for(Outlets outlets: listOutletsForUpdate) {
-                            pq.println(outlets.toString());
-                            pz.println(outlets.toString());
-                        }
-                        pq.close();
-                        pz.close();
-                        System.out.println("Отчёт успешно записан");
-
-                        break;
                     case GET_FREE_PRODUCTS:
                         AvailableProducts frame20 = new AvailableProducts("Доступные для оценки товары");
                         frame20.insertProducts(enteringMessage.getListProducts());
@@ -131,8 +106,8 @@ public class ClientThread extends Thread {
 
                         List<Products> listProductsForUpdate;
                         listProductsForUpdate=enteringMessage.getListProducts();
-                        PrintWriter wq = null;//1) 0-2000 2) 2001-5000 3) 5001-8000 4) 8001+
-                        PrintWriter wz = null;//1) 0-2000 2) 2001-5000 3) 5001-8000 4) 8001+
+                        PrintWriter pq = null;
+                        PrintWriter pz = null;
                         String string3 = "";
                         pq = new PrintWriter(new OutputStreamWriter(new FileOutputStream("otchet1.txt"), "UTF-8"));
                         pz = new PrintWriter(new OutputStreamWriter(new FileOutputStream("otchet1.json"), "UTF-8"));
@@ -146,30 +121,6 @@ public class ClientThread extends Thread {
                         System.out.println("Отчёт успешно записан");
 
                         break;
-                    /*case GET_ARENDED_OUTLETS:
-                        ArendedOutlets frame5 = new ArendedOutlets("Арендованные помещения");
-                        frame5.insertOutlets(enteringMessage.getListOutlets());
-                        frame5.insertRents(enteringMessage.getListRents());
-                        frame5.setVisible(true);
-                        frame5.setResizable(false);
-                        frame5.setLocationRelativeTo(null);
-
-                        List<Rent> listRentForUpdate;
-                        listRentForUpdate=enteringMessage.getListRents();
-                        PrintWriter pw = null;//1) 0-2000 2) 2001-5000 3) 5001-8000 4) 8001+
-                        PrintWriter pp = null;//1) 0-2000 2) 2001-5000 3) 5001-8000 4) 8001+
-                        String string = "";
-                        pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream("otchet.txt"), "UTF-8"));
-                        pp = new PrintWriter(new OutputStreamWriter(new FileOutputStream("otchet.json"), "UTF-8"));
-                        for(Rent rent: listRentForUpdate) {
-                            pw.println(rent.toString());
-                            pp.println(rent.toString());
-                        }
-                        pw.close();
-                        pp.close();
-                        System.out.println("Отчёт успешно записан");
-
-                        break; */
                     case GET_UNAVAILABLE_PRODUCTS:
                         UnavailableProducts frame5 = new UnavailableProducts("Товары с оценкой качества");
                         frame5.insertProducts(enteringMessage.getListProducts());
@@ -201,22 +152,6 @@ public class ClientThread extends Thread {
                         frame6.setResizable(false);
                         frame6.setLocationRelativeTo(null);
                         break;
-                    /*case GET_ID_FOR_RENTS:
-                        try {
-                            MakeRent frame7 = new MakeRent("Оформление договора", new MenuUser("www"));
-                            frame7.insertIDoutlets(enteringMessage.getListProducts());
-                            frame7.insertIDclients(enteringMessage.getListClients());
-                            frame7.setVisible(true);
-                            frame7.setResizable(false);
-                            frame7.setLocationRelativeTo(null);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    case RENT_INSERT:
-                        msg = "Договор добавлен в базу данных";
-                        JOptionPane.showMessageDialog(mainFrame, msg);  //Диалоговое окно вывода сообщения
-                        break; */
                     case GET_ID_FOR_REVIEW:
                         try {
                             MakeReview frame7 = new MakeReview("Оценка качества", new MenuUser("www"));
@@ -237,10 +172,6 @@ public class ClientThread extends Thread {
                         msg = "Клиент добавлен в базу данных";
                         JOptionPane.showMessageDialog(mainFrame, msg);
                         break;
-                    case OUTLET_INSERT:
-                        msg = "Помещение добавлено в базу данных";
-                        JOptionPane.showMessageDialog(mainFrame, msg);
-                        break;
                     case PRODUCT_INSERT:
                         msg = "Продукт добавлен в базу данных";
                         JOptionPane.showMessageDialog(mainFrame, msg);
@@ -258,10 +189,10 @@ public class ClientThread extends Thread {
                         ////
                         List<Account> listAccountForUpdate;
                         listAccountForUpdate=enteringMessage.getListAccounts();
-                        PrintWriter pa = null;//1) 0-2000 2) 2001-5000 3) 5001-8000 4) 8001+
-                        PrintWriter pu = null;//1) 0-2000 2) 2001-5000 3) 5001-8000 4) 8001+
-                        PrintWriter p1 = null;//1) 0-2000 2) 2001-5000 3) 5001-8000 4) 8001+
-                        PrintWriter p2 = null;//1) 0-2000 2) 2001-5000 3) 5001-8000 4) 8001+
+                        PrintWriter pa = null;
+                        PrintWriter pu = null;
+                        PrintWriter p1 = null;
+                        PrintWriter p2 = null;
                         String string2 = "";
                         pa = new PrintWriter(new OutputStreamWriter(new FileOutputStream("otchet2.txt"), "UTF-8"));
                         pu = new PrintWriter(new OutputStreamWriter(new FileOutputStream("otchet2.json"), "UTF-8"));
@@ -315,10 +246,6 @@ public class ClientThread extends Thread {
 
                         ///
                         break;
-                    case DELETE_FREE_OUTLET:
-                        msg="Запись удалена";
-                        JOptionPane.showMessageDialog(mainFrame, msg);
-                        break;
                     case DELETE_AVAILABLE_PRODUCT:
                         msg="Запись удалена";
                         JOptionPane.showMessageDialog(mainFrame, msg);
@@ -328,14 +255,6 @@ public class ClientThread extends Thread {
                         JOptionPane.showMessageDialog(mainFrame, msg);
                         break;
                     case DELETE_REVIEW:
-                        msg="Запись удалена";
-                        JOptionPane.showMessageDialog(mainFrame, msg);
-                        break;
-                    case DELETE_ARENDED_OUTLET:
-                        msg="Запись удалена";
-                        JOptionPane.showMessageDialog(mainFrame, msg);
-                        break;
-                    case DELETE_RENT:
                         msg="Запись удалена";
                         JOptionPane.showMessageDialog(mainFrame, msg);
                         break;

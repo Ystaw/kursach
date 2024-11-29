@@ -4,7 +4,6 @@ package GUI;
 import messages.Message;
 import messages.MessageType;
 import tables.Account;
-import tables.Outlets;
 import tables.Products;
 
 import javax.swing.*;
