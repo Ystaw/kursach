@@ -66,28 +66,12 @@ public class MySQLDaoFactory  implements DaoFactory<Connection> {
             }
         });
 
-
-
         creators.put(Clients.class, new DaoCreator<Connection>() {
             @Override
             public GenericDao create(Connection connection) {
                 return new MySQLClientsDao(connection);
             }
         });
-        creators.put(Outlets.class, new DaoCreator<Connection>() {
-            @Override
-            public GenericDao create(Connection connection) {
-                return new MySQLOutletsDao(connection);
-            }
-        });
-        creators.put(Rent.class, new DaoCreator<Connection>() {
-            @Override
-            public GenericDao create(Connection connection) {
-                return new MySQLRentDao(connection);
-            }
-        });
-
-
 
         creators.put(Products.class, new DaoCreator<Connection>() {
             @Override

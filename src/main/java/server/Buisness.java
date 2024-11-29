@@ -5,7 +5,6 @@ import dao.GenericDao;
 import dao.PersistException;
 import messages.Message;
 import tables.Account;
-import tables.Outlets;
 import tables.Role;
 import tables.StatusUser;
 import tables.Products;
@@ -86,14 +85,6 @@ public class Buisness {
         else return iRole;
     }
 
-    public static List<Outlets> getListFreeOutlets(DaoFactory factory, Connection connection, Message message) throws PersistException, SQLException {
-
-        GenericDao dao = factory.getDao(connection, Outlets.class);
-        List <Outlets> list;
-        list=dao.getAll();
-        return list;
-
-    }
 
     public static List<Products> getListFreeProducts(DaoFactory factory, Connection connection, Message message) throws PersistException, SQLException {
 

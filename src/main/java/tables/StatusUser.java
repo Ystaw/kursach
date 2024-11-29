@@ -1,5 +1,5 @@
 package tables;
 
-public enum StatusUser {  //пользователель может быть забанен
+public enum StatusUser {
     NORMAL, BANNED
 }
